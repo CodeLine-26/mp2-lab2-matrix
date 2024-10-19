@@ -53,32 +53,14 @@ TEST(TDynamicMatrix, can_set_and_get_element)
 
 TEST(TDynamicMatrix, throws_when_set_element_with_negative_index)
 {
-    int* row1 = new int[5] {0, 1, 2, 3, 4};
-    int* row2 = new int[5] {5, 6, 7, 8, 9};
-    
-
-    TDynamicVector<int> vrow1(row1, 2);
-    TDynamicVector<int> vrow2(row2, 2);
-
     TDynamicMatrix<int> m(2);
-    m[0] = vrow1; m[1] = vrow2;
-
-    ASSERT_ANY_THROW(m.at(-1) = vrow1);
+    ASSERT_ANY_THROW(m.at(-1));
 }
 
 TEST(TDynamicMatrix, throws_when_set_element_with_too_large_index)
 {
-    int* row0 = new int[5] {0, 1, 2, 3, 4};
-    int* row1 = new int[5] {5, 6, 7, 8, 9};
-   
-
-    TDynamicVector<int> vrow0(row0, 5);
-    TDynamicVector<int> vrow1(row1, 5);
-
     TDynamicMatrix<int> m(2);
-    m[0] = vrow0; m[1] = vrow1;
-
-    ASSERT_ANY_THROW(m.at(10) = vrow0);
+    ASSERT_ANY_THROW(m.at(10));
 }
 
 TEST(TDynamicMatrix, can_assign_matrix_to_itself)
