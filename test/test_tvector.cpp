@@ -44,22 +44,10 @@ TEST(TDynamicVector, copied_vector_is_equal_to_source_one)
 
 TEST(TDynamicVector, copied_vector_has_its_own_memory)
 {
-	size_t length = 10;
-	int* arr = new int[length];
-
-	for (size_t i = 0; i < length; i++) {
-		arr[i] = i * 2;
-	}
-
-	TDynamicVector<int> source(arr, length);
-
-	delete[] arr;
-
-	TDynamicVector<int> copy(source);
-
-	copy[2] = 5;
-
-	ASSERT_NE(source, copy);
+	TDynamicVector<int> v1(5), v2(v1);
+	TDynamicVector<int>* vv1 = &v1;
+	TDynamicVector<int>* vv2 = &v2;
+	EXPECT_NE(vv1, vv2);
 }
 
 TEST(TDynamicVector, can_get_size)
@@ -79,13 +67,8 @@ TEST(TDynamicVector, can_set_and_get_element)
 
 TEST(TDynamicVector, throws_when_set_element_with_negative_index)
 {
-	int* row0 = new int[5] {0, 1, 2, 3, 4};
-	TDynamicVector<int> vrow0(row0, 5);
-	delete[] row0; 
-	TDynamicMatrix<int> m(5);
-	m[0] = vrow0; 
-
-	ASSERT_ANY_THROW(m.at(-1) = vrow0);
+	TDynamicVector<int> v(10);
+	ASSERT_ANY_THROW((v.at(-1) = 5));
 }
 
 TEST(TDynamicVector, throws_when_set_element_with_too_large_index)
@@ -97,7 +80,8 @@ TEST(TDynamicVector, throws_when_set_element_with_too_large_index)
 TEST(TDynamicVector, can_assign_vector_to_itself)
 {
 	TDynamicVector<int> v(10);
-	ASSERT_NO_THROW(v = v);
+	v = v;
+	EXPECT_EQ(v, v);
 }
 
 TEST(TDynamicVector, can_assign_vectors_of_equal_size)

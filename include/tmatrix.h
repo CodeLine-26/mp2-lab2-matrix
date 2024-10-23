@@ -59,6 +59,7 @@ public:
   ~TDynamicVector()
   {
       delete[] pMem;
+      pMem = nullptr;
   }
   TDynamicVector& operator=(const TDynamicVector& v)
   {
@@ -67,9 +68,17 @@ public:
       if (sz != v.sz)
       {
           T* p = new T[v.sz];
-          delete[] pMem;
-          pMem = p;
-          sz = v.sz;
+          if (p == nullptr)
+          {
+              throw("Error");
+          }
+          else
+          {
+              delete[] pMem;
+              pMem = p;
+              sz = v.sz;
+          }
+
       }
 
       for (size_t i = 0; i < sz; i++)
@@ -116,7 +125,7 @@ public:
   // сравнение
   bool operator==(const TDynamicVector& v) const noexcept
   {
-      for (int i=0; i < sz; i++)
+      for (int i=0; i < sz; ++i)
           if (pMem[i] != v.pMem[i])
               return 0;
       return 1;
@@ -244,7 +253,7 @@ public:
   // сравнение
   bool operator==(const TDynamicMatrix& m) const noexcept
   {
-      for (size_t i = 0; i < sz; i++)
+      for (size_t i = 0; i < sz; ++i)
           if (pMem[i] != m.pMem[i])
               return 0;
       return 1;
