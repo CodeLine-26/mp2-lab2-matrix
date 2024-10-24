@@ -2,6 +2,9 @@
 
 #include <gtest.h>
 
+static const size_t sz1 = 10;
+static const size_t sz2 = 15;
+
 TEST(TDynamicVector, can_create_vector_with_positive_length)
 {
   ASSERT_NO_THROW(TDynamicVector<int> v(5));
@@ -44,10 +47,14 @@ TEST(TDynamicVector, copied_vector_is_equal_to_source_one)
 
 TEST(TDynamicVector, copied_vector_has_its_own_memory)
 {
-	TDynamicVector<int> v1(5), v2(v1);
-	TDynamicVector<int>* vv1 = &v1;
-	TDynamicVector<int>* vv2 = &v2;
-	EXPECT_NE(vv1, vv2);
+	int* q = new int[sz1] {0, 1, 2, 3, 4, 5};
+	TDynamicVector<int> v1(q, sz1);
+	delete[] q;
+	TDynamicVector<int> v2(v1);
+	TDynamicVector<int>* point1 = &v1;
+	TDynamicVector<int>* point2 = &v2;
+
+	EXPECT_NE(point1, point2);
 }
 
 TEST(TDynamicVector, can_get_size)
@@ -79,9 +86,13 @@ TEST(TDynamicVector, throws_when_set_element_with_too_large_index)
 
 TEST(TDynamicVector, can_assign_vector_to_itself)
 {
-	TDynamicVector<int> v(10);
-	v = v;
-	EXPECT_EQ(v, v);
+	int* q = new int[sz1] {0, 1, 2, 3, 4, 5};
+	TDynamicVector<int> v1(q, sz1);
+	TDynamicVector<int> v2(q, sz1);
+	delete[] q;
+
+	v1 = v1;
+	EXPECT_EQ(v1, v2);
 }
 
 TEST(TDynamicVector, can_assign_vectors_of_equal_size)
@@ -101,14 +112,16 @@ TEST(TDynamicVector, can_assign_vectors_of_equal_size)
 
 TEST(TDynamicVector, assign_operator_change_vector_size)
 {
-	size_t l1 = 10;
-	TDynamicVector<int> v1(l1);
-
-	size_t l2 = 20;
-	TDynamicVector<int> v2(l2);
-
-	v2 = v1;
-	ASSERT_EQ(v2.size(), l1);
+	int* q = new int[sz1] {0, 1, 2, 3, 4, 5};
+	TDynamicVector<int> v1(q, sz1);
+	delete[] q;
+	int* b = new int[sz2];
+	for (int i = 0; i < sz2; i++)
+		b[i] = 3 + i;
+	TDynamicVector<int> v2(b, sz2);
+	delete[] b;
+	v1 = v2;
+	EXPECT_EQ(v1.size(), v2.size());
 }
 
 TEST(TDynamicVector, can_assign_vectors_of_different_size)
