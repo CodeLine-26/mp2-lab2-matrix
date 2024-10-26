@@ -426,3 +426,102 @@ TEST(TDynamicMatrix, cant_subtract_matrixes_with_not_equal_size)
 
     ASSERT_ANY_THROW(m - m1);
 }
+
+TEST(TDynamicMatrix, can_multiply_const_to_matrix) {
+    int* row0 = new int[5] {0, 1, 2, 3, 4};
+    int* row1 = new int[5] {5, 6, 7, 8, 9};
+    int* row2 = new int[5] {10, 11, 12, 13, 14};
+    int* row3 = new int[5] {15, 17, 18, 19, 20};
+    int* row4 = new int[5] {21, 22, 23, 24, 25};
+    TDynamicVector<int> v0(row0, 5);
+    TDynamicVector<int> v1(row1, 5);
+    TDynamicVector<int> v2(row2, 5);
+    TDynamicVector<int> v3(row3, 5);
+    TDynamicVector<int> v4(row4, 5);
+    delete[] row0; delete[] row1; delete[] row2; delete[] row3; delete[] row4;
+    TDynamicMatrix<int> m(5);
+    m[0] = v0; m[1] = v1; m[2] = v2; m[3] = v3; m[4] = v4;
+
+    ASSERT_NO_THROW(m * 6);
+}
+
+TEST(TDynamicMatrix, can_multiply_vector_to_matrix) {
+    int* row0 = new int[5] {0, 1, 2, 3, 4};
+    int* row1 = new int[5] {5, 6, 7, 8, 9};
+    int* row2 = new int[5] {10, 11, 12, 13, 14};
+    int* row3 = new int[5] {15, 17, 18, 19, 20};
+    int* row4 = new int[5] {21, 22, 23, 24, 25};
+    TDynamicVector<int> v0(row0, 5);
+    TDynamicVector<int> v1(row1, 5);
+    TDynamicVector<int> v2(row2, 5);
+    TDynamicVector<int> v3(row3, 5);
+    TDynamicVector<int> v4(row4, 5);
+    delete[] row0; delete[] row1; delete[] row2; delete[] row3; delete[] row4;
+    TDynamicMatrix<int> m(5);
+    m[0] = v0; m[1] = v1; m[2] = v2; m[3] = v3; m[4] = v4;
+
+    int* a = new int[5] {0, 1, 2, 3, 4};
+    TDynamicVector<int> v(a, 5);
+
+    ASSERT_NO_THROW(m * v);
+}
+
+TEST(TDynamicMatrix, can_multiply_matrix_to_matrix_equal_size) {
+    int* row0 = new int[5] {0, 1, 2, 3, 4};
+    int* row1 = new int[5] {5, 6, 7, 8, 9};
+    int* row2 = new int[5] {10, 11, 12, 13, 14};
+    int* row3 = new int[5] {15, 17, 18, 19, 20};
+    int* row4 = new int[5] {21, 22, 23, 24, 25};
+    TDynamicVector<int> v0(row0, 5);
+    TDynamicVector<int> v1(row1, 5);
+    TDynamicVector<int> v2(row2, 5);
+    TDynamicVector<int> v3(row3, 5);
+    TDynamicVector<int> v4(row4, 5);
+    delete[] row0; delete[] row1; delete[] row2; delete[] row3; delete[] row4;
+    TDynamicMatrix<int> m(5);
+
+    int* row5 = new int[5] {1, 1, 2, 3, 4};
+    int* row6 = new int[5] {5, 6, 7, 8, 9};
+    int* row7 = new int[5] {10, 11, 12, 13, 14};
+    int* row8 = new int[5] {15, 17, 18, 19, 20};
+    int* row9 = new int[5] {0, 1, 2, 3, 4};
+    TDynamicVector<int> v5(row5, 5);
+    TDynamicVector<int> v6(row6, 5);
+    TDynamicVector<int> v7(row7, 5);
+    TDynamicVector<int> v8(row8, 5);
+    TDynamicVector<int> v9(row9, 5);
+    delete[] row5; delete[] row6; delete[] row7; delete[] row8; delete[] row9;
+    TDynamicMatrix<int> m1(5);
+    m1[0] = v5; m1[1] = v6; m1[2] = v7; m1[3] = v8; m1[4] = v9;
+
+    ASSERT_NO_THROW(m * m1);
+}
+
+TEST(TDynamicMatrix, cant_multiply_matrix_to_matrix_different_size) {
+    int* row0 = new int[5] {0, 1, 2, 3, 4};
+    int* row1 = new int[5] {5, 6, 7, 8, 9};
+    int* row2 = new int[5] {10, 11, 12, 13, 14};
+    int* row3 = new int[5] {15, 17, 18, 19, 20};
+    int* row4 = new int[5] {21, 22, 23, 24, 25};
+    TDynamicVector<int> v0(row0, 5);
+    TDynamicVector<int> v1(row1, 5);
+    TDynamicVector<int> v2(row2, 5);
+    TDynamicVector<int> v3(row3, 5);
+    TDynamicVector<int> v4(row4, 5);
+    delete[] row0; delete[] row1; delete[] row2; delete[] row3; delete[] row4;
+    TDynamicMatrix<int> m(5);
+
+    int* row5 = new int[5] {1, 1, 2, 3, 4};
+    int* row6 = new int[5] {5, 6, 7, 8, 9};
+    int* row7 = new int[5] {10, 11, 12, 13, 14};
+    int* row8 = new int[5] {15, 17, 18, 19, 20};
+    TDynamicVector<int> v5(row5, 5);
+    TDynamicVector<int> v6(row6, 5);
+    TDynamicVector<int> v7(row7, 5);
+    TDynamicVector<int> v8(row8, 5);
+    delete[] row5; delete[] row6; delete[] row7; delete[] row8;
+    TDynamicMatrix<int> m1(4);
+    m1[0] = v5; m1[1] = v6; m1[2] = v7; m1[3] = v8;
+
+    ASSERT_ANY_THROW(m * m1);
+}
