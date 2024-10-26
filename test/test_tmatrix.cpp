@@ -428,6 +428,7 @@ TEST(TDynamicMatrix, cant_subtract_matrixes_with_not_equal_size)
 }
 
 TEST(TDynamicMatrix, can_multiply_const_to_matrix) {
+    int num = 6;
     int* row0 = new int[5] {0, 1, 2, 3, 4};
     int* row1 = new int[5] {5, 6, 7, 8, 9};
     int* row2 = new int[5] {10, 11, 12, 13, 14};
@@ -442,11 +443,16 @@ TEST(TDynamicMatrix, can_multiply_const_to_matrix) {
     TDynamicMatrix<int> m(5);
     m[0] = v0; m[1] = v1; m[2] = v2; m[3] = v3; m[4] = v4;
 
-    ASSERT_NO_THROW(m * 6);
+    TDynamicMatrix<int> res(m * num);
+
+    for (size_t i = 0; i < m.size(); i++)
+        m[i] = m[i] * num;
+
+    EXPECT_EQ(m, res);
 }
 
 TEST(TDynamicMatrix, can_multiply_vector_to_matrix) {
-    int* row0 = new int[5] {0, 1, 2, 3, 4};
+    int* row0 = new int[5] {1, 1, 2, 3, 4};
     int* row1 = new int[5] {5, 6, 7, 8, 9};
     int* row2 = new int[5] {10, 11, 12, 13, 14};
     int* row3 = new int[5] {15, 17, 18, 19, 20};
@@ -463,7 +469,14 @@ TEST(TDynamicMatrix, can_multiply_vector_to_matrix) {
     int* a = new int[5] {0, 1, 2, 3, 4};
     TDynamicVector<int> v(a, 5);
 
-    ASSERT_NO_THROW(m * v);
+    TDynamicVector<int> res( m*v);
+    TDynamicVector<int> m1(5);
+
+    for (size_t i = 0; i < m.size(); i++)
+        for (size_t j = 0; j < m.size(); j++)
+            m1[i] += m[i][j] * v[j];
+ 
+    EXPECT_EQ(m1, res);
 }
 
 TEST(TDynamicMatrix, can_multiply_matrix_to_matrix_equal_size) {
@@ -494,7 +507,15 @@ TEST(TDynamicMatrix, can_multiply_matrix_to_matrix_equal_size) {
     TDynamicMatrix<int> m1(5);
     m1[0] = v5; m1[1] = v6; m1[2] = v7; m1[3] = v8; m1[4] = v9;
 
-    ASSERT_NO_THROW(m * m1);
+    TDynamicMatrix<int> res(m * m1);
+    TDynamicMatrix<int> res1(5);
+
+    for (size_t i = 0; i < m.size(); i++)
+        for (size_t j = 0; j < m.size(); j++)
+            for (size_t k = 0; k < m.size(); k++)
+                res1[i][j] += m[i][j] * m1[j][k];
+
+    EXPECT_EQ(res1, res);
 }
 
 TEST(TDynamicMatrix, cant_multiply_matrix_to_matrix_different_size) {

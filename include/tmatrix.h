@@ -262,10 +262,19 @@ public:
   // сравнение
   bool operator==(const TDynamicMatrix& m) const noexcept
   {
-      for (size_t i = 0; i < sz; i++)
+      bool flag = 1;
+      if (sz != m.sz)
+          return 0;
+      for (int i = 0; i < sz; i++)
           if (pMem[i] != m.pMem[i])
-              return 0;
-      return 1;
+          {
+              flag = 0;
+              break;
+          }
+      if (flag)
+          return 1;
+      else
+          return 0;
   }
 
   // матрично-скалярные операции
