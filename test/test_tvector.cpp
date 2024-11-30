@@ -1,9 +1,125 @@
 #include "tmatrix.h"
 
 #include <gtest.h>
+template <typename T>
 
 static const size_t sz1 = 10;
 static const size_t sz2 = 15;
+
+class Fixtures : public ::testing::Test
+{
+public:
+	T* tmp1;
+	T* tmp2;
+
+	TDynamicVector<T>* vec;  
+	TDynamicVector<T>* v0;  
+	TDynamicVector<T>* v1;
+	TDynamicVector<T>* v2;
+
+
+	void SetUp()
+	{
+		v0 = nullptr;
+		tmp1 = new T[10]{ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+		v1 = new TDynamicVector<T>(tmp1, 10);
+		tmp2 = new T[10]{ 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 };
+		v2 = new TDynamicVector<T>(tmp2, 10);
+		vec = new TDynamicVector<T>(*v1);
+
+	}
+	void Destroy()
+	{
+		delete vec; delete v0; delete v1; delete v2; 
+		delete[] tmp1; tmp1 = nullptr;
+		delete[] tmp2; tmp2 = nullptr;
+
+	}
+
+	void BuildDynamicVector(size_t s = 5)
+	{
+		vec = new TDynamicVector<T>(s);
+		v0 = new TDynamicVector<T>(*vec);
+
+	}
+};
+
+TEST_V(Fixtures);
+
+TEST_V(Fixtures, can_create_vector_with_positive_length)
+{
+	ASSERT_NO_THROW(this->BuildDynamicVector(1));
+}
+
+TEST_V(Fixtures, cant_create_too_large_vector)
+{
+	ASSERT_ANY_THROW(this->BuildDynamicVector(MAX_VECTOR_SIZE + 1));
+}
+
+TEST_V(Fixtures, throws_when_create_vector_with_negative_length)
+{
+	ASSERT_ANY_THROW(this->BuildDynamicVector(-5));
+}
+
+TEST_V(Fixtures, can_create_copied_vector)
+{
+	ASSERT_NO_THROW(this->BuildDynamicVector());
+}
+
+TEST_V(Fixtures, copied_vector_is_equal_to_source_one)
+{
+	EXPECT_EQ((*(this->vec)), (*(this->v1)));
+}
+
+TEST_V(Fixtures, copied_vector_has_its_own_memory)
+{
+	EXPECT_NE((this->vec), (this->v1));
+}
+
+TEST_V(Fixtures, can_get_size)
+{
+	EXPECT_EQ(10, (this->vec->size()));
+}
+
+TEST_V(Fixtures, can_set_and_get_element)
+{
+	this->vec[0][0] = 4;
+
+	EXPECT_EQ((this->vec[0][0]), 4);
+}
+
+TEST_V(Fixtures, throws_when_set_element_with_negative_index)
+{
+	ASSERT_ANY_THROW(this->vec->at(-1) = 4);
+}
+
+TEST_V(Fixtures, throws_when_set_element_with_too_large_index)
+{
+	ASSERT_ANY_THROW(this->vec->at(50));
+}
+
+TEST_V(Fixtures, can_assign_vector_to_itself)
+{
+	*(this->vec) = *(this->vec);
+
+	EXPECT_EQ(*(this->vec), *(this->vec));
+}
+
+TEST_V(Fixtures, can_assign_vectors_of_equal_size)
+{
+	*(this->vec) = *(this->v2);
+
+	EXPECT_EQ(*(this->vec), *(this->v2));
+}
+
+
+REGISTER_TEST_V(Fixtures, can_create_vector_with_positive_length, cant_create_too_large_vector, throws_when_create_vector_with_negative_length,
+	can_create_copied_vector, copied_vector_is_equal_to_source_one, copied_vector_has_its_own_memory, can_get_size, can_set_and_get_element, throws_when_set_element_with_negative_index,
+	throws_when_set_element_with_too_large_index, can_assign_vector_to_itself, can_assign_vectors_of_equal_size);
+
+typedef::testing::Types<int, double> VectorTypes;
+
+INSTANTIATE_TEST_V(VectorTypesInstantiation, Fixtures, VectorTypes);
 
 TEST(TDynamicVector, can_create_vector_with_positive_length)
 {
