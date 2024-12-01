@@ -101,7 +101,7 @@ TYPED_TEST_P(TestTDynamicVector, throws_when_set_element_with_too_large_index)
 	ASSERT_ANY_THROW(this->vec->at(50));
 }
 
-ì(TestTDynamicVector, can_assign_vector_to_itself)
+TYPED_TEST_P(TestTDynamicVector, can_assign_vector_to_itself)
 {
 	*(this->vec) = *(this->vec);
 
