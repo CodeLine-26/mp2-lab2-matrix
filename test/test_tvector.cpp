@@ -21,12 +21,14 @@ public:
 
 	void SetUp()
 	{
-		v0 = nullptr;
 		tmp1 = new T[10]{ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
 		v1 = new TDynamicVector<T>(tmp1, 10);
+
 		tmp2 = new T[10]{ 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 };
 		v2 = new TDynamicVector<T>(tmp2, 10);
+
 		vec = new TDynamicVector<T>(*v1);
+		v0 = nullptr;
 
 	}
 	void TearDown()
@@ -47,66 +49,66 @@ public:
 
 TYPED_TEST_CASE_P(TestTDynamicVector);
 
-TYPED_TEST_CASE_P(TestTDynamicVector, can_create_vector_with_positive_length)
+TYPED_TEST_P(TestTDynamicVector, can_create_vector_with_positive_length)
 {
 	ASSERT_NO_THROW(this->BuildDynamicVector(1));
 }
 
-TYPED_TEST_CASE_P(TestTDynamicVector, cant_create_too_large_vector)
+TYPED_TEST_P(TestTDynamicVector, cant_create_too_large_vector)
 {
 	ASSERT_ANY_THROW(this->BuildDynamicVector(MAX_VECTOR_SIZE + 1));
 }
 
-TYPED_TEST_CASE_P(TestTDynamicVector, throws_when_create_vector_with_negative_length)
+TYPED_TEST_P(TestTDynamicVector, throws_when_create_vector_with_negative_length)
 {
 	ASSERT_ANY_THROW(this->BuildDynamicVector(-5));
 }
 
-TYPED_TEST_CASE_P(TestTDynamicVector, can_create_copied_vector)
+TYPED_TEST_P(TestTDynamicVector, can_create_copied_vector)
 {
 	ASSERT_NO_THROW(this->BuildDynamicVector());
 }
 
-TYPED_TEST_CASE_P(TestTDynamicVector, copied_vector_is_equal_to_source_one)
+TYPED_TEST_P(TestTDynamicVector, copied_vector_is_equal_to_source_one)
 {
 	EXPECT_EQ((*(this->vec)), (*(this->v1)));
 }
 
-TYPED_TEST_CASE_P(TestTDynamicVector, copied_vector_has_its_own_memory)
+TYPED_TEST_P(TestTDynamicVector, copied_vector_has_its_own_memory)
 {
 	EXPECT_NE((this->vec), (this->v1));
 }
 
-TYPED_TEST_CASE_P(TestTDynamicVector, can_get_size)
+TYPED_TEST_P(TestTDynamicVector, can_get_size)
 {
 	EXPECT_EQ(10, (this->vec->size()));
 }
 
-TYPED_TEST_CASE_P(TestTDynamicVector, can_set_and_get_element)
+TYPED_TEST_P(TestTDynamicVector, can_set_and_get_element)
 {
 	this->vec[0][0] = 4;
 
 	EXPECT_EQ((this->vec[0][0]), 4);
 }
 
-TYPED_TEST_CASE_P(TestTDynamicVector, throws_when_set_element_with_negative_index)
+TYPED_TEST_P(TestTDynamicVector, throws_when_set_element_with_negative_index)
 {
 	ASSERT_ANY_THROW(this->vec->at(-1) = 4);
 }
 
-TYPED_TEST_CASE_P(TestTDynamicVector, throws_when_set_element_with_too_large_index)
+TYPED_TEST_P(TestTDynamicVector, throws_when_set_element_with_too_large_index)
 {
 	ASSERT_ANY_THROW(this->vec->at(50));
 }
 
-TYPED_TEST_CASE_P(TestTDynamicVector, can_assign_vector_to_itself)
+ì(TestTDynamicVector, can_assign_vector_to_itself)
 {
 	*(this->vec) = *(this->vec);
 
 	EXPECT_EQ(*(this->vec), *(this->vec));
 }
 
-TYPED_TEST_CASE_P(TestTDynamicVector, can_assign_vectors_of_equal_size)
+TYPED_TEST_P(TestTDynamicVector, can_assign_vectors_of_equal_size)
 {
 	*(this->vec) = *(this->v2);
 
