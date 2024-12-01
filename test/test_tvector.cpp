@@ -7,7 +7,7 @@ static const size_t sz1 = 10;
 static const size_t sz2 = 15;
 
 template <typename T>
-class Fixtures : public ::testing::Test
+class TestTDynamicVector : public ::testing::Test
 {
 public:
 	T* tmp1;
@@ -29,7 +29,7 @@ public:
 		vec = new TDynamicVector<T>(*v1);
 
 	}
-	void Destroy()
+	void TearDown()
 	{
 		delete vec; delete v0; delete v1; delete v2; 
 		delete[] tmp1; tmp1 = nullptr;
@@ -45,68 +45,68 @@ public:
 	}
 };
 
-TYPED_TEST_CASE_P(Fixtures);
+TYPED_TEST_CASE_P(TestTDynamicVector);
 
-TYPED_TEST_CASE_P(Fixtures, can_create_vector_with_positive_length)
+TYPED_TEST_CASE_P(TestTDynamicVector, can_create_vector_with_positive_length)
 {
 	ASSERT_NO_THROW(this->BuildDynamicVector(1));
 }
 
-TYPED_TEST_CASE_P(Fixtures, cant_create_too_large_vector)
+TYPED_TEST_CASE_P(TestTDynamicVector, cant_create_too_large_vector)
 {
 	ASSERT_ANY_THROW(this->BuildDynamicVector(MAX_VECTOR_SIZE + 1));
 }
 
-TYPED_TEST_CASE_P(Fixtures, throws_when_create_vector_with_negative_length)
+TYPED_TEST_CASE_P(TestTDynamicVector, throws_when_create_vector_with_negative_length)
 {
 	ASSERT_ANY_THROW(this->BuildDynamicVector(-5));
 }
 
-TYPED_TEST_CASE_P(Fixtures, can_create_copied_vector)
+TYPED_TEST_CASE_P(TestTDynamicVector, can_create_copied_vector)
 {
 	ASSERT_NO_THROW(this->BuildDynamicVector());
 }
 
-TYPED_TEST_CASE_P(Fixtures, copied_vector_is_equal_to_source_one)
+TYPED_TEST_CASE_P(TestTDynamicVector, copied_vector_is_equal_to_source_one)
 {
 	EXPECT_EQ((*(this->vec)), (*(this->v1)));
 }
 
-TYPED_TEST_CASE_P(Fixtures, copied_vector_has_its_own_memory)
+TYPED_TEST_CASE_P(TestTDynamicVector, copied_vector_has_its_own_memory)
 {
 	EXPECT_NE((this->vec), (this->v1));
 }
 
-TYPED_TEST_CASE_P(Fixtures, can_get_size)
+TYPED_TEST_CASE_P(TestTDynamicVector, can_get_size)
 {
 	EXPECT_EQ(10, (this->vec->size()));
 }
 
-TYPED_TEST_CASE_P(Fixtures, can_set_and_get_element)
+TYPED_TEST_CASE_P(TestTDynamicVector, can_set_and_get_element)
 {
 	this->vec[0][0] = 4;
 
 	EXPECT_EQ((this->vec[0][0]), 4);
 }
 
-TYPED_TEST_CASE_P(Fixtures, throws_when_set_element_with_negative_index)
+TYPED_TEST_CASE_P(TestTDynamicVector, throws_when_set_element_with_negative_index)
 {
 	ASSERT_ANY_THROW(this->vec->at(-1) = 4);
 }
 
-TYPED_TEST_CASE_P(Fixtures, throws_when_set_element_with_too_large_index)
+TYPED_TEST_CASE_P(TestTDynamicVector, throws_when_set_element_with_too_large_index)
 {
 	ASSERT_ANY_THROW(this->vec->at(50));
 }
 
-TYPED_TEST_CASE_P(Fixtures, can_assign_vector_to_itself)
+TYPED_TEST_CASE_P(TestTDynamicVector, can_assign_vector_to_itself)
 {
 	*(this->vec) = *(this->vec);
 
 	EXPECT_EQ(*(this->vec), *(this->vec));
 }
 
-TYPED_TEST_CASE_P(Fixtures, can_assign_vectors_of_equal_size)
+TYPED_TEST_CASE_P(TestTDynamicVector, can_assign_vectors_of_equal_size)
 {
 	*(this->vec) = *(this->v2);
 
@@ -114,13 +114,13 @@ TYPED_TEST_CASE_P(Fixtures, can_assign_vectors_of_equal_size)
 }
 
 
-REGISTER_TYPED_TEST_CASE_P(Fixtures, can_create_vector_with_positive_length, cant_create_too_large_vector, throws_when_create_vector_with_negative_length,
+REGISTER_TYPED_TEST_CASE_P(TestTDynamicVector, can_create_vector_with_positive_length, cant_create_too_large_vector, throws_when_create_vector_with_negative_length,
 	can_create_copied_vector, copied_vector_is_equal_to_source_one, copied_vector_has_its_own_memory, can_get_size, can_set_and_get_element, throws_when_set_element_with_negative_index,
 	throws_when_set_element_with_too_large_index, can_assign_vector_to_itself, can_assign_vectors_of_equal_size);
 
 typedef::testing::Types<int, double> VectorTypes;
 
-INSTANTIATE_TYPED_TEST_CASE_P(VectorTypesInstantiation, Fixtures, VectorTypes);
+INSTANTIATE_TYPED_TEST_CASE_P(VectorTypesInstantiation, TestTDynamicVector, VectorTypes);
 
 //TEST(TDynamicVector, can_create_vector_with_positive_length)
 //{
