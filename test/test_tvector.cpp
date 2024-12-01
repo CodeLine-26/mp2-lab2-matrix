@@ -1,11 +1,12 @@
 #include "tmatrix.h"
 
 #include <gtest.h>
-template <typename T>
+
 
 static const size_t sz1 = 10;
 static const size_t sz2 = 15;
 
+template <typename T>
 class Fixtures : public ::testing::Test
 {
 public:
