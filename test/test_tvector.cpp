@@ -45,68 +45,68 @@ public:
 	}
 };
 
-TEST_V(Fixtures);
+TYPED_TEST_CASE_P(Fixtures);
 
-TEST_V(Fixtures, can_create_vector_with_positive_length)
+TYPED_TEST_CASE_P(Fixtures, can_create_vector_with_positive_length)
 {
 	ASSERT_NO_THROW(this->BuildDynamicVector(1));
 }
 
-TEST_V(Fixtures, cant_create_too_large_vector)
+TYPED_TEST_CASE_P(Fixtures, cant_create_too_large_vector)
 {
 	ASSERT_ANY_THROW(this->BuildDynamicVector(MAX_VECTOR_SIZE + 1));
 }
 
-TEST_V(Fixtures, throws_when_create_vector_with_negative_length)
+TYPED_TEST_CASE_P(Fixtures, throws_when_create_vector_with_negative_length)
 {
 	ASSERT_ANY_THROW(this->BuildDynamicVector(-5));
 }
 
-TEST_V(Fixtures, can_create_copied_vector)
+TYPED_TEST_CASE_P(Fixtures, can_create_copied_vector)
 {
 	ASSERT_NO_THROW(this->BuildDynamicVector());
 }
 
-TEST_V(Fixtures, copied_vector_is_equal_to_source_one)
+TYPED_TEST_CASE_P(Fixtures, copied_vector_is_equal_to_source_one)
 {
 	EXPECT_EQ((*(this->vec)), (*(this->v1)));
 }
 
-TEST_V(Fixtures, copied_vector_has_its_own_memory)
+TYPED_TEST_CASE_P(Fixtures, copied_vector_has_its_own_memory)
 {
 	EXPECT_NE((this->vec), (this->v1));
 }
 
-TEST_V(Fixtures, can_get_size)
+TYPED_TEST_CASE_P(Fixtures, can_get_size)
 {
 	EXPECT_EQ(10, (this->vec->size()));
 }
 
-TEST_V(Fixtures, can_set_and_get_element)
+TYPED_TEST_CASE_P(Fixtures, can_set_and_get_element)
 {
 	this->vec[0][0] = 4;
 
 	EXPECT_EQ((this->vec[0][0]), 4);
 }
 
-TEST_V(Fixtures, throws_when_set_element_with_negative_index)
+TYPED_TEST_CASE_P(Fixtures, throws_when_set_element_with_negative_index)
 {
 	ASSERT_ANY_THROW(this->vec->at(-1) = 4);
 }
 
-TEST_V(Fixtures, throws_when_set_element_with_too_large_index)
+TYPED_TEST_CASE_P(Fixtures, throws_when_set_element_with_too_large_index)
 {
 	ASSERT_ANY_THROW(this->vec->at(50));
 }
 
-TEST_V(Fixtures, can_assign_vector_to_itself)
+TYPED_TEST_CASE_P(Fixtures, can_assign_vector_to_itself)
 {
 	*(this->vec) = *(this->vec);
 
 	EXPECT_EQ(*(this->vec), *(this->vec));
 }
 
-TEST_V(Fixtures, can_assign_vectors_of_equal_size)
+TYPED_TEST_CASE_P(Fixtures, can_assign_vectors_of_equal_size)
 {
 	*(this->vec) = *(this->v2);
 
@@ -114,13 +114,13 @@ TEST_V(Fixtures, can_assign_vectors_of_equal_size)
 }
 
 
-REGISTER_TEST_V(Fixtures, can_create_vector_with_positive_length, cant_create_too_large_vector, throws_when_create_vector_with_negative_length,
+REGISTER_TYPED_TEST_CASE_P(Fixtures, can_create_vector_with_positive_length, cant_create_too_large_vector, throws_when_create_vector_with_negative_length,
 	can_create_copied_vector, copied_vector_is_equal_to_source_one, copied_vector_has_its_own_memory, can_get_size, can_set_and_get_element, throws_when_set_element_with_negative_index,
 	throws_when_set_element_with_too_large_index, can_assign_vector_to_itself, can_assign_vectors_of_equal_size);
 
 typedef::testing::Types<int, double> VectorTypes;
 
-INSTANTIATE_TEST_V(VectorTypesInstantiation, Fixtures, VectorTypes);
+INSTANTIATE_TYPED_TEST_CASE_P(VectorTypesInstantiation, Fixtures, VectorTypes);
 
 TEST(TDynamicVector, can_create_vector_with_positive_length)
 {
